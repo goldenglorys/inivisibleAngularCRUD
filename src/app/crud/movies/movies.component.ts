@@ -8,51 +8,52 @@ import { MoviesService } from '../../services/movies.service';
   styleUrls: ['./movies.component.css'],
 })
 export class MoviesComponent implements OnInit {
-  // settings1: any = {
-  //   licenseKey: 'non-commercial-and-evaluation',
-  //   contextMenu: {
-  //     items: {
-  //       row_above: {
-  //         title: 'Insert row above this one',
-  //       },
-  //       row_below: {},
-  //       separator: Handsontable.plugins.ContextMenu.SEPARATOR,
-  //       clear_custom: {
-  //         title: 'Clear all cells',
-  //         callback: function () {},
-  //       },
-  //     },
-  //   },
-  // };
+  dataset: Movie[] = [];
   settings: any = {
     colHeaders: true,
     rowHeaders: true,
     licenseKey: 'non-commercial-and-evaluation',
     contextMenu: ['row_above', 'row_below', 'remove_row'],
-    colWidths: '250px',
     width: '100%',
-    manualColumnMove: true,
-    manualRowMove: true,
-    manualColumnResize: true,
-    manualRowResize: true,
+    manualColumnMove:
+      localStorage['tableColumnPos'] == null
+        ? true
+        : JSON.parse(localStorage['tableColumnPos']),
+    manualColumnResize:
+      localStorage['tableColumnSize'] == null
+        ? [250, 250, 250, 250, 250, 250]
+        : JSON.parse(localStorage['tableColumnSize']),
+    afterColumnResize: function (newSize: number, column: number) {
+      console.log(newSize, column);
+      let parseData = JSON.parse(localStorage['tableColumnSize']);
+      parseData[column] = newSize;
+      localStorage.setItem('tableColumnSize', JSON.stringify(parseData));
+      console.log(JSON.parse(localStorage['tableColumnSize']));
+    },
+    afterColumnMove: function (movedColumns: any, finalIndex: number) {
+      console.log(movedColumns, finalIndex);
+      let parseData = JSON.parse(localStorage['tableColumnPos']);
+      let dropIndexData = parseData[finalIndex];
+      let mvIndex = parseData.indexOf(movedColumns[0]);
+      parseData[finalIndex] = movedColumns[0];
+      parseData[mvIndex] = dropIndexData;
+      localStorage.setItem('tableColumnPos', JSON.stringify(parseData));
+    },
   };
 
-  dataset: Movie[] = [
-    // { id: 1, name: 'Ted Right', address: 'Wall Street' },
-    // { id: 2, name: 'Frank Honest', address: 'Pennsylvania Avenue' },
-    // { id: 3, name: 'Joan Well', address: 'Broadway' },
-    // { id: 4, name: 'Gail Polite', address: 'Bourbon Street' },
-    // { id: 5, name: 'Michael Fair', address: 'Lombard Street' },
-    // { id: 6, name: 'Mia Fair', address: 'Rodeo Drive' },
-    // { id: 7, name: 'Cora Fair', address: 'Sunset Boulevard' },
-    // { id: 8, name: 'Jack Right', address: 'Michigan Avenue' },
-  ];
-
-  constructor(public movieService: MoviesService) {}
+  constructor(public movieService: MoviesService) {
+    if (!localStorage.hasOwnProperty('tableColumnSize')) {
+      let size = [250, 250, 250, 250, 250, 250];
+      localStorage.setItem('tableColumnSize', JSON.stringify(size));
+    }
+    if (!localStorage.hasOwnProperty('tableColumnPos')) {
+      let size = [0, 1, 2, 3, 4, 5];
+      localStorage.setItem('tableColumnPos', JSON.stringify(size));
+    }
+  }
 
   ngOnInit(): void {
     this.movieService.getJSON().subscribe((data: Movie[]) => {
-      console.log(data[0]);
       this.dataset = data;
     });
   }

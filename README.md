@@ -1,8 +1,12 @@
-# AngularBoilerplate
+# Invisible CRUD App
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.0.
 
-## Development server
+[![Netlify Status](https://api.netlify.com/api/v1/badges/993af0f7-0664-4d10-9b18-acb952c7fa4d/deploy-status)](https://app.netlify.com/sites/invisible-crud/deploys)
+
+[Live Link](https://invisible-crud.netlify.app)
+
+<!-- ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -24,4 +28,4 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page. -->
